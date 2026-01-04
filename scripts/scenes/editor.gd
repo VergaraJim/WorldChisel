@@ -6,8 +6,8 @@ var editorMenu
 var container: Node2D
 var mainCamera: Camera2D
 
-var map_width = 100
-var map_height = 100
+var map_width = 10
+var map_height = 10
 
 var tiles = {}
 var isPlacingTile: bool
@@ -143,7 +143,6 @@ func _saveDataToFileTemp():
 
 func loadTempSave():
 	var path = "user://editor.tmp"
-	return
 	if (FileAccess.file_exists(path)):
 		var tempFile = FileAccess.open(path, FileAccess.READ)
 		var saveContent = tempFile.get_as_text()
@@ -154,7 +153,7 @@ func loadTempSave():
 		
 		tiles.clear()
 		for savedTile in saveObject["tiles"]:
-			var key = str(savedTile.x)+"|"+str(savedTile.y)
+			var key = str(int(savedTile.x))+"|"+str(int(savedTile.y))
 			var tile = Classes.Tile.new(savedTile["x"],savedTile["y"],savedTile["type"])
 			tiles[key] = tile
 	
