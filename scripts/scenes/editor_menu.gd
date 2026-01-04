@@ -66,3 +66,7 @@ func _on_check_button_toggled(toggled_on: bool) -> void:
 
 func _on_null_button_down() -> void:
 	selectTile(null)
+
+
+func _on_tile_editor_toggle_toggled(toggled_on: bool) -> void:
+	$PanelContainer/GridContainer/Menu/TileEditorContainer.visible = toggled_on

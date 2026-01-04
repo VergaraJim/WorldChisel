@@ -10,6 +10,7 @@ var map_width = 40
 var map_height = 40
 
 var tiles: Array[Classes.Tile] = []
+var isPlacingTile: bool
 
 ## START UP
 func _ready():
@@ -24,7 +25,14 @@ func _ready():
 	$MainCamera/CanvasLayer/EditorMenu.width = map_width
 	$MainCamera/CanvasLayer/EditorMenu.height = map_height
 
-##
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.is_pressed():
+				isPlacingTile = true
+			else:
+				isPlacingTile = false
+
 func renderTiles():
 	## Clear all children
 	container.get_children().map(func(child): child.queue_free())
@@ -42,17 +50,18 @@ func renderTile(tile: Classes.Tile):
 	tileInstance.scale = Vector2(Constants.tileSize, Constants.tileSize)
 	tileInstance.get_node("Sprite").modulate = Classes.TileTypeColor[tile.type]
 	tileInstance.name = nodeName
-	tileInstance.connect("onClick", func(): tileClickEvent(tile))
+	tileInstance.connect("onHover", func(): tileHoverEvent(tile))
 	container.add_child(tileInstance)
 
-func tileClickEvent(tile: Classes.Tile):
-	var selectedType = editorMenu.selectedTileType
-	if selectedType != null:
-		var tileIndex = tiles.find(tile)
-		tile.type = selectedType
-		## TODO: Check if it's necessary to do this, i think it may be referencable, thus no need to update the array object
-		tiles[tileIndex] = tile
-		renderTile(tile)
+func tileHoverEvent(tile: Classes.Tile):
+	if isPlacingTile:
+		var selectedType = editorMenu.selectedTileType
+		if selectedType != null:
+			var tileIndex = tiles.find(tile)
+			tile.type = selectedType
+			## TODO: Check if it's necessary to do this, i think it may be referencable, thus no need to update the array object
+			tiles[tileIndex] = tile
+			renderTile(tile)
 
 func mapSizeChange():
 	var tempTiles: Array[Classes.Tile] = []

@@ -113,4 +113,5 @@ text = "NONE"
 [connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth" to="." method="_on_input_width_value_changed"]
 [connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight" to="." method="_on_input_height_value_changed"]
 [connection signal="pressed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/ButtonApply" to="." method="_on_button_apply_pressed"]
+[connection signal="toggled" from="PanelContainer/GridContainer/Menu/TileEditorToggle" to="." method="_on_tile_editor_toggle_toggled"]
 [connection signal="button_down" from="PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor/NULL" to="." method="_on_null_button_down"]
