@@ -23,3 +23,6 @@ class Tile:
 		
 	func _to_dict() -> Dictionary:
 		return { "x": x, "y": y, "type": type }
+	
+	func getKey() -> String:
+		return str(x)+"|"+str(y)

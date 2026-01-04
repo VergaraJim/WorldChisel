@@ -6,10 +6,10 @@ var editorMenu
 var container: Node2D
 var mainCamera: Camera2D
 
-var map_width = 40
-var map_height = 40
+var map_width = 100
+var map_height = 100
 
-var tiles: Array[Classes.Tile] = []
+var tiles = {}
 var isPlacingTile: bool
 
 var tilePlacingCooldownBase = 1
@@ -22,7 +22,7 @@ func _ready():
 	editorMenu = get_node("MainCamera/CanvasLayer/EditorMenu")
 	loadTempSave()
 	mapSizeChange()
-	renderTiles()
+	fullRenderTiles()
 	## Initial camera placement
 	## TODO
 	## Set map size
@@ -41,26 +41,32 @@ func _input(event: InputEvent) -> void:
 			else:
 				isPlacingTile = false
 
-func renderTiles():
+func fullRenderTiles():
 	## Clear all children
-	container.get_children().map(func(child): child.queue_free())
+	var oldNodes = container.get_children()
+	for oldNode in oldNodes:
+		if !(tiles.has(oldNode.name)):
+			container.remove_child(oldNode)
+			oldNode.queue_free()
 	## Render the tiles
-	for tile in tiles:
-		renderTile(tile)
+	for tileKey in tiles.keys():
+		renderTile(tileKey)
 
-func renderTile(tile: Classes.Tile):
+func renderTile(tileKey: String):
 	saveToTemp()
-	var nodeName = str(tile.x) + "|" + str(tile.y)
-	var oldTileNode = $TileContainer.get_node_or_null(nodeName)
-	if (oldTileNode):
-		oldTileNode.queue_free()
-	var tileInstance = tileBase.instantiate()
-	tileInstance.position = Vector2(tile.x * Constants.tileSize, tile.y * Constants.tileSize)
-	tileInstance.scale = Vector2(Constants.tileSize, Constants.tileSize)
-	tileInstance.get_node("Sprite").modulate = Classes.TileTypeColor[tile.type]
-	tileInstance.name = nodeName
-	tileInstance.connect("onHover", func(): tileHoverEvent(tile))
-	container.add_child(tileInstance)
+	var tile = tiles[tileKey]
+	var oldTileNode = container.get_node_or_null(tileKey)
+	var currentTile
+	if (oldTileNode and is_instance_valid(oldTileNode)):
+		currentTile = oldTileNode
+	else:
+		currentTile = tileBase.instantiate()
+		currentTile.position = Vector2(tile.x * Constants.tileSize, tile.y * Constants.tileSize)
+		currentTile.scale = Vector2(Constants.tileSize, Constants.tileSize)
+		currentTile.name = tileKey
+		currentTile.connect("onHover", func(): tileHoverEvent(tile))
+		container.add_child(currentTile)
+	currentTile.get_node("Sprite").modulate = Classes.TileTypeColor[tile.type]
 
 func tileHoverEvent(tile: Classes.Tile):
 	if isPlacingTile:
@@ -68,37 +74,31 @@ func tileHoverEvent(tile: Classes.Tile):
 		var brushSize = editorMenu.tileEditBrushSize
 		if selectedType != null && tilePlacingCooldown == 0:
 			tilePlacingCooldown = tilePlacingCooldownBase
-			var editedTiles: Array[Classes.Tile] = []
+			var editedTiles = []
 			tile.type = selectedType
-			editedTiles.append(tile)
+			editedTiles.append(tile.getKey())
 			## Brush size effect
 			for x in range(brushSize):
 				for y in range(brushSize):
 					var offsetTopLeft = ((brushSize - 1) / 2)
 					var currentX = x - offsetTopLeft + tile.x
 					var currentY = y - offsetTopLeft + tile.y
-					var extraTileIndex = tiles.find_custom(func(tempTile): return tempTile.x == currentX and tempTile.y == currentY)
-					var extraTile = tiles[extraTileIndex]
+					var extraTileKey = str(currentX)+"|"+str(currentY)
+					var extraTile = tiles[extraTileKey] if tiles.has(extraTileKey) else null
 					if (extraTile):
 						extraTile.type = selectedType
-						editedTiles.append(extraTile)
-			for editedTile in editedTiles:
-				renderTile(editedTile)
+						editedTiles.append(extraTileKey)
+			for editedTileKey in editedTiles:
+				renderTile(editedTileKey)
 
 func mapSizeChange():
 	var defaultTile = Classes.TileType.OCEAN
-	var tileDict = {}
-	var tempTiles: Array[Classes.Tile] = []
-	
-	for tile in tiles:
-		var dictKey = str(tile.x)+"|"+str(tile.y)
-		tileDict[dictKey] = tile
+	var tempTiles = {}
 	
 	for x in range(map_width):
 		for y in range(map_height):
-			## TODO: Fix this, this causes massive lag
 			var dictKey = str(x)+"|"+str(y)
-			var oldTile = tileDict[dictKey]
+			var oldTile = tiles[dictKey] if tiles.has(dictKey) else null
 			var tile = null
 			if (oldTile):
 				# If i found the old tile, then use that.
@@ -106,7 +106,7 @@ func mapSizeChange():
 			else:
 				# If no old tile was found, create a new one.
 				tile = Classes.Tile.new(x,y,defaultTile)
-			tempTiles.append(tile)
+			tempTiles[tile.getKey()] = tile
 	tiles.clear()
 	tiles = tempTiles
 
@@ -114,7 +114,7 @@ func _on_editor_menu_size_change_apply(width: int, height: int) -> void:
 	map_width = width
 	map_height = height
 	mapSizeChange()
-	renderTiles()
+	fullRenderTiles()
 
 # This function, due to the debounce timer, will only execute after 1 seconds after it is called, cancels old requests.
 var saveTmpDebounceTimer: SceneTreeTimer
@@ -133,13 +133,17 @@ func _saveDataToFileTemp():
 		"tiles": []
 	}
 	
-	for tile in tiles:
+	for tileKey in tiles.keys():
+		var tile = tiles[tileKey]
 		data["tiles"].append(tile._to_dict())
+	
+	#print(JSON.stringify(data))
 	
 	tempFile.store_line(JSON.stringify(data))
 
 func loadTempSave():
 	var path = "user://editor.tmp"
+	return
 	if (FileAccess.file_exists(path)):
 		var tempFile = FileAccess.open(path, FileAccess.READ)
 		var saveContent = tempFile.get_as_text()
@@ -150,6 +154,7 @@ func loadTempSave():
 		
 		tiles.clear()
 		for savedTile in saveObject["tiles"]:
+			var key = str(savedTile.x)+"|"+str(savedTile.y)
 			var tile = Classes.Tile.new(savedTile["x"],savedTile["y"],savedTile["type"])
-			tiles.append(tile)
+			tiles[key] = tile
 	
