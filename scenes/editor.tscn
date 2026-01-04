@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c0h1jell6atu3"]
+[gd_scene load_steps=4 format=3 uid="uid://c0h1jell6atu3"]
 
 [ext_resource type="Script" uid="uid://uj5s2mvw8q4x" path="res://scripts/scenes/editor.gd" id="1_b1cmn"]
 [ext_resource type="Script" uid="uid://cuqb5j10y77bh" path="res://scripts/scenes/camera.gd" id="2_pxqd5"]
+[ext_resource type="PackedScene" uid="uid://bjl5o18upsbst" path="res://scenes/components/editor_menu.tscn" id="3_ba0ut"]
 
 [node name="Editor" type="Node2D"]
 script = ExtResource("1_b1cmn")
@@ -10,3 +11,9 @@ script = ExtResource("1_b1cmn")
 
 [node name="MainCamera" type="Camera2D" parent="."]
 script = ExtResource("2_pxqd5")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="MainCamera"]
+
+[node name="EditorMenu" parent="MainCamera/CanvasLayer" instance=ExtResource("3_ba0ut")]
+
+[connection signal="sizeChangeApply" from="MainCamera/CanvasLayer/EditorMenu" to="." method="_on_editor_menu_size_change_apply"]

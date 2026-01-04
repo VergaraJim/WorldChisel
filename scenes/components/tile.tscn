@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://ittl1ihl73q5"]
+[gd_scene load_steps=5 format=3 uid="uid://ittl1ihl73q5"]
+
+[ext_resource type="Script" uid="uid://dbubrdvktluol" path="res://scripts/scenes/tile.gd" id="1_elrc3"]
 
 [sub_resource type="Gradient" id="Gradient_nw4s8"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
@@ -7,7 +9,22 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 gradient = SubResource("Gradient_nw4s8")
 width = 1
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d8t2i"]
+
 [node name="Tile" type="Node2D"]
+script = ExtResource("1_elrc3")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 
 [node name="Sprite" type="Sprite2D" parent="."]
 texture = SubResource("GradientTexture1D_elrc3")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(0.05, 0.05)
+shape = SubResource("RectangleShape2D_d8t2i")
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

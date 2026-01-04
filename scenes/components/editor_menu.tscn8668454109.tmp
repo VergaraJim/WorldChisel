@@ -1,0 +1,115 @@
+[gd_scene load_steps=4 format=3 uid="uid://bjl5o18upsbst"]
+
+[ext_resource type="Script" uid="uid://ce1o20g15f6e1" path="res://scripts/scenes/editor_menu.gd" id="1_gjcvr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_45pih"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gjcvr"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="EditorMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_gjcvr")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_45pih")
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Menu" type="VBoxContainer" parent="PanelContainer/GridContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="MapSizeToggle" type="CheckButton" parent="PanelContainer/GridContainer/Menu"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "Map Size"
+
+[node name="MapSizeContainer" type="PanelContainer" parent="PanelContainer/GridContainer/Menu"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gjcvr")
+
+[node name="MapSize" type="VBoxContainer" parent="PanelContainer/GridContainer/Menu/MapSizeContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="LabelWidth" type="Label" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+layout_mode = 2
+text = "Width"
+
+[node name="InputWidth" type="SpinBox" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+max_value = 4000.0
+rounded = true
+
+[node name="LabelHeight" type="Label" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+layout_mode = 2
+text = "Height"
+
+[node name="InputHeight" type="SpinBox" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+max_value = 4000.0
+rounded = true
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ButtonApply" type="Button" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+layout_mode = 2
+text = "Apply"
+
+[node name="TileEditorToggle" type="CheckButton" parent="PanelContainer/GridContainer/Menu"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+button_pressed = true
+text = "Tile Selection"
+
+[node name="TileEditorContainer" type="PanelContainer" parent="PanelContainer/GridContainer/Menu"]
+layout_mode = 2
+
+[node name="TileEditor" type="VBoxContainer" parent="PanelContainer/GridContainer/Menu/TileEditorContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor"]
+layout_mode = 2
+text = "NONE"
+
+[connection signal="toggled" from="PanelContainer/GridContainer/Menu/MapSizeToggle" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth" to="." method="_on_input_width_value_changed"]
+[connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight" to="." method="_on_input_height_value_changed"]
+[connection signal="pressed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/ButtonApply" to="." method="_on_button_apply_pressed"]
