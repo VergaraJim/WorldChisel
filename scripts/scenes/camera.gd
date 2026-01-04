@@ -6,7 +6,7 @@ var camera_start_position
 var dragging = false
 
 var zoom_speed = 0.05
-var min_zoom = 0.5
+var min_zoom = 0.1
 var max_zoom = 2
 
 func _input(event):
@@ -27,4 +27,4 @@ func _input(event):
 				zoom -= Vector2(zoom_speed, zoom_speed)
 	elif event is InputEventMouseMotion:
 		if dragging:
-			position = camera_start_position + mouse_start_pos - event.position
+			position = camera_start_position + ((mouse_start_pos - event.position) * (1 / zoom.x))

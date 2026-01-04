@@ -86,17 +86,26 @@ func tileHoverEvent(tile: Classes.Tile):
 				renderTile(editedTile)
 
 func mapSizeChange():
+	var defaultTile = Classes.TileType.OCEAN
+	var tileDict = {}
 	var tempTiles: Array[Classes.Tile] = []
+	
+	for tile in tiles:
+		var dictKey = str(tile.x)+"|"+str(tile.y)
+		tileDict[dictKey] = tile
+	
 	for x in range(map_width):
 		for y in range(map_height):
-			var oldTileIndex = tiles.find_custom(func(tempTile : Classes.Tile): return tempTile.x == x && tempTile.y == y)
+			## TODO: Fix this, this causes massive lag
+			var dictKey = str(x)+"|"+str(y)
+			var oldTile = tileDict[dictKey]
 			var tile = null
-			if (oldTileIndex != -1):
+			if (oldTile):
 				# If i found the old tile, then use that.
-				tile = tiles[oldTileIndex]
+				tile = oldTile
 			else:
 				# If no old tile was found, create a new one.
-				tile = Classes.Tile.new(x,y,Classes.TileType.OCEAN)
+				tile = Classes.Tile.new(x,y,defaultTile)
 			tempTiles.append(tile)
 	tiles.clear()
 	tiles = tempTiles
