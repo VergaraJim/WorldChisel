@@ -20,3 +20,6 @@ class Tile:
 		x = _x
 		y = _y
 		type = _type
+		
+	func _to_dict() -> Dictionary:
+		return { "x": x, "y": y, "type": type }

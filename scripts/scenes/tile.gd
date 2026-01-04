@@ -14,5 +14,5 @@ func _on_area_2d_mouse_exited() -> void:
 signal onHover
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		onHover.emit()

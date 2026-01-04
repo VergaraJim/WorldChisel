@@ -93,6 +93,10 @@ theme_override_constants/separation = 20
 layout_mode = 2
 text = "Apply"
 
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/GridContainer/Menu"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
 [node name="TileEditorToggle" type="CheckButton" parent="PanelContainer/GridContainer/Menu"]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
@@ -109,9 +113,26 @@ layout_mode = 2
 layout_mode = 2
 text = "NONE"
 
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/GridContainer/Menu"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LabelTileEditor" type="Label" parent="PanelContainer/GridContainer/Menu"]
+layout_mode = 2
+text = "Tile edit brush size [1]"
+
+[node name="TileEditorSize" type="HSlider" parent="PanelContainer/GridContainer/Menu"]
+layout_mode = 2
+min_value = 1.0
+max_value = 11.0
+step = 2.0
+value = 1.0
+rounded = true
+
 [connection signal="toggled" from="PanelContainer/GridContainer/Menu/MapSizeToggle" to="." method="_on_check_button_toggled"]
 [connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth" to="." method="_on_input_width_value_changed"]
 [connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight" to="." method="_on_input_height_value_changed"]
 [connection signal="pressed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/ButtonApply" to="." method="_on_button_apply_pressed"]
 [connection signal="toggled" from="PanelContainer/GridContainer/Menu/TileEditorToggle" to="." method="_on_tile_editor_toggle_toggled"]
 [connection signal="button_down" from="PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor/NULL" to="." method="_on_null_button_down"]
+[connection signal="value_changed" from="PanelContainer/GridContainer/Menu/TileEditorSize" to="." method="_on_tile_editor_size_value_changed"]

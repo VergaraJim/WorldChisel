@@ -2,6 +2,8 @@ extends Control
 
 var widthInput: SpinBox
 var heightInput: SpinBox
+var tileEditBrushLabel: Label
+var tileEditBrushSlider: HSlider
 
 var selectedTileType
 
@@ -15,10 +17,17 @@ var height = 0 :
 		height = value
 		if (heightInput):
 			heightInput.value = value
+var tileEditBrushSize = 1 :
+	set (value):
+		tileEditBrushSize = value
+		tileEditBrushLabel.text = "Tile edit brush size ["+str(value)+"]"
+		tileEditBrushSlider.value = value
 
 func _ready() -> void:
 	widthInput = $PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth
 	heightInput = $PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight
+	tileEditBrushLabel = $PanelContainer/GridContainer/Menu/LabelTileEditor
+	tileEditBrushSlider = $PanelContainer/GridContainer/Menu/TileEditorSize
 	generateTileSelection()
 	selectTile(null) # Default tile selected is null
 
@@ -43,7 +52,6 @@ func selectTile(tileType = null):
 			# Set the border
 			style.set_border_width_all(2) # 2px border on all sides
 			style.border_color = Color.GOLD # Gold outline
-			style.corner_radius_top_left = 4 # Optional: rounded corners
 			# Apply it to the 'normal' state
 			tileButton.add_theme_stylebox_override("normal", style)
 		else:
@@ -63,10 +71,11 @@ func _on_input_height_value_changed(value: float) -> void:
 func _on_check_button_toggled(toggled_on: bool) -> void:
 	$PanelContainer/GridContainer/Menu/MapSizeContainer.visible = toggled_on
 
-
 func _on_null_button_down() -> void:
 	selectTile(null)
 
-
 func _on_tile_editor_toggle_toggled(toggled_on: bool) -> void:
 	$PanelContainer/GridContainer/Menu/TileEditorContainer.visible = toggled_on
+
+func _on_tile_editor_size_value_changed(value: float) -> void:
+	tileEditBrushSize = int(value)
