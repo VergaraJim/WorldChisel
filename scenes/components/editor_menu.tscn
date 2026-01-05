@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjl5o18upsbst"]
+[gd_scene load_steps=6 format=3 uid="uid://bjl5o18upsbst"]
 
 [ext_resource type="Script" uid="uid://ce1o20g15f6e1" path="res://scripts/scenes/editor_menu.gd" id="1_gjcvr"]
 
@@ -26,6 +26,22 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0j8r"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_yp5hn"]
+font_size = 12
+font_color = Color(3.013768, 0.47000718, 0, 1)
+
 [node name="EditorMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -36,92 +52,106 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_gjcvr")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 0
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_45pih")
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer"]
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
+mouse_filter = 0
 
-[node name="Menu" type="VBoxContainer" parent="PanelContainer/GridContainer"]
+[node name="Menu" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer"]
 layout_mode = 2
+mouse_filter = 0
 alignment = 1
 
-[node name="MapSizeToggle" type="CheckButton" parent="PanelContainer/GridContainer/Menu"]
+[node name="MapSizeToggle" type="CheckButton" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 text = "Map Size"
 
-[node name="MapSizeContainer" type="PanelContainer" parent="PanelContainer/GridContainer/Menu"]
+[node name="MapSizeContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gjcvr")
 
-[node name="MapSize" type="VBoxContainer" parent="PanelContainer/GridContainer/Menu/MapSizeContainer"]
+[node name="MapSize" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="LabelWidth" type="Label" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+[node name="LabelWidth" type="Label" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
 layout_mode = 2
 text = "Width"
 
-[node name="InputWidth" type="SpinBox" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+[node name="InputWidth" type="SpinBox" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 max_value = 4000.0
 rounded = true
 
-[node name="LabelHeight" type="Label" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+[node name="LabelHeight" type="Label" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
 layout_mode = 2
 text = "Height"
 
-[node name="InputHeight" type="SpinBox" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+[node name="InputHeight" type="SpinBox" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 max_value = 4000.0
 rounded = true
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="ButtonApply" type="Button" parent="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
+[node name="ButtonApply" type="Button" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize"]
 layout_mode = 2
 text = "Apply"
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/GridContainer/Menu"]
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="TileEditorToggle" type="CheckButton" parent="PanelContainer/GridContainer/Menu"]
+[node name="TileEditorToggle" type="CheckButton" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 button_pressed = true
 text = "Tile Selection"
 
-[node name="TileEditorContainer" type="PanelContainer" parent="PanelContainer/GridContainer/Menu"]
+[node name="TileEditorContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 layout_mode = 2
 
-[node name="TileEditor" type="VBoxContainer" parent="PanelContainer/GridContainer/Menu/TileEditorContainer"]
+[node name="TileEditor" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer"]
 layout_mode = 2
 
-[node name="NULL" type="Button" parent="PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor"]
+[node name="NULL" type="Button" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor"]
 layout_mode = 2
 text = "NONE"
 
-[node name="HSeparator2" type="HSeparator" parent="PanelContainer/GridContainer/Menu"]
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="LabelTileEditor" type="Label" parent="PanelContainer/GridContainer/Menu"]
+[node name="LabelTileEditor" type="Label" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 layout_mode = 2
 text = "Tile edit brush size [1]"
 
-[node name="TileEditorSize" type="HSlider" parent="PanelContainer/GridContainer/Menu"]
+[node name="TileEditorSize" type="HSlider" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
 layout_mode = 2
 min_value = 1.0
 max_value = 11.0
@@ -129,10 +159,55 @@ step = 2.0
 value = 1.0
 rounded = true
 
-[connection signal="toggled" from="PanelContainer/GridContainer/Menu/MapSizeToggle" to="." method="_on_check_button_toggled"]
-[connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth" to="." method="_on_input_width_value_changed"]
-[connection signal="value_changed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight" to="." method="_on_input_height_value_changed"]
-[connection signal="pressed" from="PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/ButtonApply" to="." method="_on_button_apply_pressed"]
-[connection signal="toggled" from="PanelContainer/GridContainer/Menu/TileEditorToggle" to="." method="_on_tile_editor_toggle_toggled"]
-[connection signal="button_down" from="PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor/NULL" to="." method="_on_null_button_down"]
-[connection signal="value_changed" from="PanelContainer/GridContainer/Menu/TileEditorSize" to="." method="_on_tile_editor_size_value_changed"]
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RandomizeToggle" type="CheckButton" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+button_pressed = true
+text = "Randomize
+"
+
+[node name="RandomizeContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d0j8r")
+
+[node name="RandomizeList" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer"]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="SeedLabel" type="Label" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList"]
+layout_mode = 2
+text = "Seed"
+
+[node name="SeedInput" type="TextEdit" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+placeholder_text = "Ex: 123456789"
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RandomizeButton" type="Button" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList"]
+layout_mode = 2
+text = "RANDOMIZE"
+
+[node name="OverwriteWarning" type="Label" parent="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList"]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Are you sure you want to overwrite your map?"
+label_settings = SubResource("LabelSettings_yp5hn")
+autowrap_mode = 2
+
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeToggle" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth" to="." method="_on_input_width_value_changed"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight" to="." method="_on_input_height_value_changed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/ButtonApply" to="." method="_on_button_apply_pressed"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorToggle" to="." method="_on_tile_editor_toggle_toggled"]
+[connection signal="button_down" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor/NULL" to="." method="_on_null_button_down"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorSize" to="." method="_on_tile_editor_size_value_changed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList/RandomizeButton" to="." method="_on_button_pressed"]

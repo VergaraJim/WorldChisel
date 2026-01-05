@@ -1,12 +1,13 @@
 extends Node
 
-enum TileType {OCEAN,SHALLOW_WATER,LAND,FOREST,HILL,MOUNTAIN}
+enum TileType {OCEAN,SHALLOW_WATER,LAND,FOREST,DESERT,HILL,MOUNTAIN}
 
 var TileTypeColor = {
 	TileType.OCEAN: Color.DARK_BLUE,
 	TileType.SHALLOW_WATER: Color.AQUA,
 	TileType.LAND: Color.SEA_GREEN,
 	TileType.FOREST: Color.DARK_GREEN,
+	TileType.DESERT: Color.SANDY_BROWN,
 	TileType.HILL: Color.DARK_SEA_GREEN,
 	TileType.MOUNTAIN: Color.WEB_GRAY,
 }

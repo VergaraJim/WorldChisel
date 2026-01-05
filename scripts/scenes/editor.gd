@@ -1,13 +1,16 @@
 extends Node2D
 
+# TODO: Add undo / redo
+# TODO: Add randomize with perlin noise and seed
+
 const tileBase = preload("res://scenes/components/tile.tscn")
 var editorMenu
 
 var container: Node2D
 var mainCamera: Camera2D
 
-var map_width = 10
-var map_height = 10
+var map_width = 150
+var map_height = 150
 
 var tiles = {}
 var isPlacingTile: bool
@@ -20,7 +23,8 @@ func _ready():
 	mainCamera = get_node("MainCamera")
 	container = get_node("TileContainer")
 	editorMenu = get_node("MainCamera/CanvasLayer/EditorMenu")
-	loadTempSave()
+	#loadTempSave() #temp disabled
+	generateMap("113219317")
 	mapSizeChange()
 	fullRenderTiles()
 	## Initial camera placement
@@ -156,4 +160,23 @@ func loadTempSave():
 			var key = str(int(savedTile.x))+"|"+str(int(savedTile.y))
 			var tile = Classes.Tile.new(savedTile["x"],savedTile["y"],savedTile["type"])
 			tiles[key] = tile
+
+
+func _on_editor_menu_randomize_map_apply(seedValue: String) -> void:
+	generateMap(seedValue)
+
+func generateMap(seedValue: String):
+	var selectedSeed: int
+	if seedValue:
+		if seedValue.is_valid_int():
+			selectedSeed = seedValue.to_int()
+		else:
+			selectedSeed = seedValue.hash()
+	else:
+		selectedSeed = randi_range(100_000_000, 999_000_000)
 	
+	var generator = Generator.new()
+	var generatedTiles = generator.generate(map_width,map_height,selectedSeed)
+	
+	tiles = generatedTiles
+	fullRenderTiles()
