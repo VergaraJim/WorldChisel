@@ -23,8 +23,7 @@ func _ready():
 	mainCamera = get_node("MainCamera")
 	container = get_node("TileContainer")
 	editorMenu = get_node("MainCamera/CanvasLayer/EditorMenu")
-	#loadTempSave() #temp disabled
-	generateMap("113219317")
+	loadTempSave() #temp disabled
 	mapSizeChange()
 	fullRenderTiles()
 	## Initial camera placement
