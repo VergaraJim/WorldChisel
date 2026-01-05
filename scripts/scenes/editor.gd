@@ -1,7 +1,6 @@
 extends Node2D
 
 # TODO: Add undo / redo
-# TODO: Add randomize with perlin noise and seed
 
 const tileBase = preload("res://scenes/components/tile.tscn")
 var editorMenu
@@ -13,7 +12,9 @@ var map_width = 150
 var map_height = 150
 
 var tiles = {}
-var isPlacingTile: bool
+var isPlacingTile: bool = false
+var filteredTile = null
+var isFilteredPlacing: bool = false
 
 var tilePlacingCooldownBase = 1
 var tilePlacingCooldown = 0
@@ -43,6 +44,14 @@ func _input(event: InputEvent) -> void:
 				isPlacingTile = true
 			else:
 				isPlacingTile = false
+	if event is InputEventKey:
+		if event.keycode == KEY_SHIFT:
+			if (event.is_pressed()):
+				isFilteredPlacing = true
+			else:
+				isFilteredPlacing = false
+	if !isFilteredPlacing:
+		filteredTile = null
 
 func fullRenderTiles():
 	## Clear all children
@@ -72,14 +81,16 @@ func renderTile(tileKey: String):
 	currentTile.get_node("Sprite").modulate = Classes.TileTypeColor[tile.type]
 
 func tileHoverEvent(tile: Classes.Tile):
+	# Check if placing tile (AKA clicking left)
 	if isPlacingTile:
+		if (isFilteredPlacing and filteredTile == null):
+			filteredTile = tile.type
 		var selectedType = editorMenu.selectedTileType
 		var brushSize = editorMenu.tileEditBrushSize
+		# Check if placing tile is in cooldown and selectedType of tile is not null
 		if selectedType != null && tilePlacingCooldown == 0:
 			tilePlacingCooldown = tilePlacingCooldownBase
 			var editedTiles = []
-			tile.type = selectedType
-			editedTiles.append(tile.getKey())
 			## Brush size effect
 			for x in range(brushSize):
 				for y in range(brushSize):
@@ -89,8 +100,9 @@ func tileHoverEvent(tile: Classes.Tile):
 					var extraTileKey = str(currentX)+"|"+str(currentY)
 					var extraTile = tiles[extraTileKey] if tiles.has(extraTileKey) else null
 					if (extraTile):
-						extraTile.type = selectedType
-						editedTiles.append(extraTileKey)
+						if (!isFilteredPlacing or ((extraTile.type == filteredTile) or (filteredTile == null))):
+							extraTile.type = selectedType
+							editedTiles.append(extraTileKey)
 			for editedTileKey in editedTiles:
 				renderTile(editedTileKey)
 
