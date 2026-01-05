@@ -26,7 +26,6 @@ grow_vertical = 2
 script = ExtResource("1_yqeox")
 
 [node name="MainButtons" type="GridContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -57,6 +56,7 @@ layout_mode = 2
 text = "SETTINGS"
 
 [node name="MapMenu" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -87,10 +87,12 @@ layout_mode = 2
 [node name="ScrollContainer" type="ScrollContainer" parent="MapMenu/GridContainer/PanelContainer"]
 custom_minimum_size = Vector2(600, 300)
 layout_mode = 2
+horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MapMenu/GridContainer/PanelContainer/ScrollContainer"]
+[node name="MapListContainer" type="VBoxContainer" parent="MapMenu/GridContainer/PanelContainer/ScrollContainer"]
 custom_minimum_size = Vector2(5.66, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="AddNewMapButton" type="Button" parent="MapMenu/GridContainer"]
 layout_mode = 2
@@ -98,3 +100,4 @@ text = "ADD NEW MAP"
 
 [connection signal="button_up" from="MainButtons/Button" to="." method="_on_button_button_up"]
 [connection signal="button_up" from="MapMenu/GridContainer/HBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
+[connection signal="pressed" from="MapMenu/GridContainer/AddNewMapButton" to="." method="_on_add_new_map_button_pressed"]

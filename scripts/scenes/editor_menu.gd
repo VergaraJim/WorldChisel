@@ -26,10 +26,10 @@ var tileEditBrushSize = 1 :
 		tileEditBrushSlider.value = value
 
 func _ready() -> void:
-	widthInput = $ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth
-	heightInput = $ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight
-	tileEditBrushLabel = $ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/LabelTileEditor
-	tileEditBrushSlider = $ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorSize
+	widthInput = $SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputWidth
+	heightInput = $SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer/MapSize/InputHeight
+	tileEditBrushLabel = $SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/LabelTileEditor
+	tileEditBrushSlider = $SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorSize
 	generateTileSelection()
 	selectTile(null) # Default tile selected is null
 
@@ -39,14 +39,14 @@ func generateTileSelection():
 		button.text = tileType
 		button.name = tileType
 		button.connect("button_down", func(): selectTile(tileType))
-		$ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor.add_child(button)
+		$SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor.add_child(button)
 
 func selectTile(tileType = null):
 	if tileType:
 		selectedTileType = Classes.TileType[tileType]
 	else:
 		selectedTileType = null
-	for tileButton: Button in $ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor.get_children():
+	for tileButton: Button in $SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer/TileEditor.get_children():
 		if tileButton.name == tileType or (tileType == null and tileButton.name == 'NULL'):
 			# Create a new style look
 			var style = StyleBoxFlat.new()
@@ -63,16 +63,28 @@ signal sizeChangeApply(width: int, height: int)
 
 signal randomizeMapApply(seedValue: String)
 
+signal exitSave(filename: String)
+
+signal exitNoSave()
+
 func randomizeMap():
 	if !randomizeSure:
 		# Ask if sure
 		randomizeSure = true
-		$ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList/OverwriteWarning.visible = true
+		$SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList/OverwriteWarning.visible = true
 	else:
 		randomizeSure = false
-		$ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList/OverwriteWarning.visible = false
-		var seedValue = $ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList/SeedInput.text
+		$SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList/OverwriteWarning.visible = false
+		var seedValue = $SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/RandomizeContainer/RandomizeList/SeedInput.text
 		randomizeMapApply.emit(seedValue)
+
+func openExitScreen():
+	$ExitScreen.visible = true
+	$SaveScreen.visible = false
+
+func openSaveScreen():
+	$ExitScreen.visible = false
+	$SaveScreen.visible = true
 
 func _on_button_apply_pressed() -> void:
 	sizeChangeApply.emit(width, height)
@@ -84,16 +96,35 @@ func _on_input_height_value_changed(value: float) -> void:
 	height = value
 
 func _on_check_button_toggled(toggled_on: bool) -> void:
-	$ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer.visible = toggled_on
+	$SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/MapSizeContainer.visible = toggled_on
 
 func _on_null_button_down() -> void:
 	selectTile(null)
 
 func _on_tile_editor_toggle_toggled(toggled_on: bool) -> void:
-	$ScrollContainer/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer.visible = toggled_on
+	$SideMenu/VBoxContainer/PanelContainer/GridContainer/Menu/TileEditorContainer.visible = toggled_on
 
 func _on_tile_editor_size_value_changed(value: float) -> void:
 	tileEditBrushSize = int(value)
 
 func _on_button_pressed() -> void:
 	randomizeMap()
+
+func _on_save_yes_pressed() -> void:
+	$ExitScreen.visible = false
+	$SaveScreen.visible = true
+
+func _on_save_no_pressed() -> void:
+	$ExitScreen.visible = false
+	exitNoSave.emit()
+
+func _on_save_cancel_pressed() -> void:
+	$ExitScreen.visible = false
+
+func _on_save_save_pressed() -> void:
+	$SaveScreen.visible = false
+	if ($SaveScreen/PanelContainer/VBoxContainer/SaveName.text != ""):
+		exitSave.emit($SaveScreen/PanelContainer/VBoxContainer/SaveName.text)
+
+func _on_save_save_cancel_pressed() -> void:
+	$SaveScreen.visible = false

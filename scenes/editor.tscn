@@ -17,5 +17,7 @@ script = ExtResource("2_pxqd5")
 
 [node name="EditorMenu" parent="MainCamera/CanvasLayer" instance=ExtResource("3_ba0ut")]
 
+[connection signal="exitNoSave" from="MainCamera/CanvasLayer/EditorMenu" to="." method="_on_editor_menu_exit_no_save"]
+[connection signal="exitSave" from="MainCamera/CanvasLayer/EditorMenu" to="." method="_on_editor_menu_exit_save"]
 [connection signal="randomizeMapApply" from="MainCamera/CanvasLayer/EditorMenu" to="." method="_on_editor_menu_randomize_map_apply"]
 [connection signal="sizeChangeApply" from="MainCamera/CanvasLayer/EditorMenu" to="." method="_on_editor_menu_size_change_apply"]
