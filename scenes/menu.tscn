@@ -45,7 +45,7 @@ layout_mode = 2
 theme = SubResource("Theme_4h3mk")
 text = "MAPS"
 
-[node name="Button2" type="Button" parent="MainButtons"]
+[node name="StartButton" type="Button" parent="MainButtons"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "START"
@@ -98,6 +98,47 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "ADD NEW MAP"
 
+[node name="StartMenu" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.0
+offset_top = -177.5
+offset_right = 310.0
+offset_bottom = 177.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4h3mk")
+
+[node name="GridContainer" type="GridContainer" parent="StartMenu"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu/GridContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="StartMenu/GridContainer/HBoxContainer"]
+layout_mode = 2
+text = "BACK"
+
+[node name="PanelContainer" type="PanelContainer" parent="StartMenu/GridContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="StartMenu/GridContainer/PanelContainer"]
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="StartListContainer" type="VBoxContainer" parent="StartMenu/GridContainer/PanelContainer/ScrollContainer"]
+custom_minimum_size = Vector2(5.66, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
 [connection signal="button_up" from="MainButtons/Button" to="." method="_on_button_button_up"]
+[connection signal="pressed" from="MainButtons/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="button_up" from="MapMenu/GridContainer/HBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
 [connection signal="pressed" from="MapMenu/GridContainer/AddNewMapButton" to="." method="_on_add_new_map_button_pressed"]
+[connection signal="pressed" from="StartMenu/GridContainer/HBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

@@ -3,7 +3,7 @@ extends Node2D
 var actionHistory = []
 
 var mapName = ""
-var mapFile
+var mapFile = ""
 
 const tileBase = preload("res://scenes/components/tile.tscn")
 var editorMenu
@@ -28,7 +28,10 @@ func _ready():
 	container = get_node("TileContainer")
 	editorMenu = get_node("MainCamera/CanvasLayer/EditorMenu")
 	if !mapFile:
+		print("TEST2")
 		loadDataFromFile("temp.tmp")
+	else:
+		loadDataFromFile(mapFile)
 	mapSizeChange()
 	fullRenderTiles()
 	## Initial camera placement

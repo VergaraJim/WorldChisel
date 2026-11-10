@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://b83ugvkqqhfxc"]
+
+[ext_resource type="TileSet" uid="uid://ooh5a84p3p0m" path="res://data/world_tileset.tres" id="1_mw311"]
+[ext_resource type="Script" uid="uid://xv6tvigsm7ox" path="res://scripts/scenes/2d_renderer.gd" id="1_oj1iv"]
+[ext_resource type="Script" uid="uid://cuqb5j10y77bh" path="res://scripts/scenes/camera.gd" id="3_6do5n"]
+
+[node name="2dRenderer" type="Node2D"]
+script = ExtResource("1_oj1iv")
+
+[node name="TileMap" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_mw311")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("3_6do5n")
